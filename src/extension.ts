@@ -52,6 +52,7 @@ function updateInfoSO(status: string, date: string) {
 		modifyItemBar('Org Expired !', new vscode.ThemeColor('statusBarItem.errorBackground'));
 	} else {
 		let diffDays = calculateDifferenceDays(date);
+		console.log(diffDays);
 		if(diffDays === 0) { 
 			modifyItemBar('Warning, this is the last day !', new vscode.ThemeColor('statusBarItem.errorBackground')); 
 		} else {
@@ -74,7 +75,8 @@ function calculateDifferenceDays(date: string) {
 	let today = new Date();
 	let difference = Math.abs(expirationDate.getTime() - today.getTime());
 	console.log(difference);
-	return Math.ceil(difference / (1000 * 3600 * 24)); 
+	console.log(difference / (1000 * 3600 * 24));
+	return Math.floor(difference / (1000 * 3600 * 24));
 }
 
 // this method is called when your extension is deactivated
