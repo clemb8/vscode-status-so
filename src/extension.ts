@@ -52,9 +52,14 @@ function updateInfoSO(status: string, date: string) {
 		modifyItemBar('Org Expired !', new vscode.ThemeColor('statusBarItem.errorBackground'));
 	} else {
 		let diffDays = calculateDifferenceDays(date);
-		diffDays <= 2 ? 
+		if(diffDays === 0) { 
+			modifyItemBar('Warning, this is the last day !', new vscode.ThemeColor('statusBarItem.errorBackground')); 
+		} else {
+			diffDays <= 2 ? 
 			modifyItemBar(`Org expire in ${diffDays} days`, new vscode.ThemeColor('statusBarItem.warningBackground')) :
 			modifyItemBar(`Org expire in ${diffDays} days`, myStatusBarItem.backgroundColor);
+		}
+
 	}
 }
 
