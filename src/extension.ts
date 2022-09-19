@@ -9,12 +9,13 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	console.log('Congratulations, your extension "status-so" is now active!');
 
-	let disposable = vscode.commands.registerCommand('status-so.helloWorld', () => {
-		vscode.window.showInformationMessage('Hello World from status-SO!');
+	let disposable = vscode.commands.registerCommand('status-so.showExpiration', () => {
+		getStatusSO();
 	});
 	context.subscriptions.push(disposable);
 
 	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
+	myStatusBarItem.command = 'status-so.showExpiration';
 	myStatusBarItem.text = 'Waiting for informations';
 	myStatusBarItem.tooltip = 'Current Organization Expiration Date';
 	context.subscriptions.push(myStatusBarItem);
@@ -42,9 +43,6 @@ async function getStatusSO() {
 	} catch(e) {
 		modifyItemBar('');
 	}
-	
-
-	
 }
 
 function updateInfoSO(status: string, date: string) {
@@ -58,7 +56,7 @@ function updateInfoSO(status: string, date: string) {
 		} else {
 			diffDays <= 2 ? 
 			modifyItemBar(`Org expire in ${diffDays} days`, new vscode.ThemeColor('statusBarItem.warningBackground')) :
-			modifyItemBar(`Org expire in ${diffDays} days`, myStatusBarItem.backgroundColor);
+			modifyItemBar(`Org expire in ${diffDays} days`, new vscode.ThemeColor('statusBarItem.standardBackground'));
 		}
 
 	}
