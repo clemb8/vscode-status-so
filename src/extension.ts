@@ -27,19 +27,21 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 const execShell = (cmd: string) =>
-new Promise<string>((resolve, reject) => {
-  process.exec(cmd, (err, out) => {
-	if (err) { return resolve(cmd + ' error!'); }
-	return resolve(out);
-  });
-});
+	new Promise<string>((resolve, reject) => {
+		process.exec(cmd, (err, out) => {
+			if (err) { return resolve(cmd + ' error!'); }
+			return resolve(out);
+  		});
+	});
 
 async function getStatusSO() {
 	let workspaceRoot = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined;
 	const display = await execShell(`cd ${workspaceRoot} && sfdx force:org:display --json`);
 	try {
 		const infoSO = JSON.parse(display);
-		infoSO.result.status ? updateInfoSO(infoSO.result.status, infoSO.result.expirationDate) : modifyItemBar('');
+		infoSO.result.status ? 
+			updateInfoSO(infoSO.result.status, infoSO.result.expirationDate) : 
+			adjustInfoEnv(infoSO.result.connectedStatus, infoSO.result.username);
 	} catch(e) {
 		modifyItemBar('');
 	}
@@ -58,7 +60,14 @@ function updateInfoSO(status: string, date: string) {
 			modifyItemBar(`Org expire in ${diffDays} days`, new vscode.ThemeColor('statusBarItem.warningBackground')) :
 			modifyItemBar(`Org expire in ${diffDays} days`, new vscode.ThemeColor('statusBarItem.standardBackground'));
 		}
+	}
+}
 
+function adjustInfoEnv(status: string, username: string) {
+	if(username.startsWith('test')) {
+		modifyItemBar('Org Expired !', new vscode.ThemeColor('statusBarItem.errorBackground'));
+	} else {
+		modifyItemBar('');
 	}
 }
 
