@@ -11,4 +11,4 @@ A simple VS code extension to display the number of days before a SO (Salesforce
 5. Run `code --install-extension status-so-0.2.1.vsix`
 6. Voila! You should see the extension installed in your VS Code!
 
-[Status-SO](img/Status-SO.JPG)
+![Status-SO](img/Status-SO.JPG)
